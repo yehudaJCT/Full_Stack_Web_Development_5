@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "json:test": "json-server --watch test.json",
-    "json:server": "json-server https://jsonplaceholder.typicode.com/db"
+    "json:server": "json-server --watch db.json"
   },
   "author": "",
   "license": "ISC",
