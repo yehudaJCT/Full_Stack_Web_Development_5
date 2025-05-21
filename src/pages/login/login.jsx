@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAll } from "../utils/dbUtil";
+import { saveCurrentUser } from "../utils/users";
 
 const Login = () => {
 	const [form, setForm] = useState({ name: "", password: "" });
 	const [error, setError] = useState("");
+	const [users, setUsers] = useState([]);
+
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		getAll("users")
+			.then((data) => setUsers(data))
+			.catch((err) => setError(err.message));
+	}, []);
 
 	const handleChange = (e) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
@@ -16,8 +28,11 @@ const Login = () => {
 			setError("Please fill in all fields.");
 			return;
 		}
-		// TODO: yp
-		users = (async () => await fetch("http://localhost:3000/users"))();
+
+		if (!users.some((user) => user.name === form.name)) {
+			setError("User not found.");
+			return;
+		}
 		if (
 			!users.some(
 				(user) =>
@@ -27,7 +42,12 @@ const Login = () => {
 			setError("Invalid username or password.");
 			return;
 		}
-		alert("Logged in!");
+		const user = users.find(
+			(user) => user.name === form.name && user.website === form.password
+		);
+		const userId = user ? user.id : null;
+		saveCurrentUser(JSON.stringify({ userId: userId, name: form.name }));
+		navigate("/home");
 	};
 
 	return (
@@ -43,7 +63,7 @@ const Login = () => {
 			<h2>Login</h2>
 			<form onSubmit={handleSubmit}>
 				<div style={{ marginBottom: 16 }}>
-					<label>Email:</label>
+					<label>Name:</label>
 					<input
 						type="text"
 						name="name"
