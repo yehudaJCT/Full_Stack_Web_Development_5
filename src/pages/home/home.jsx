@@ -1,30 +1,29 @@
-import { useEffect, useState } from 'react';
-import { getAll } from '../utils/dbUtil';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Sidebar from './Components/sidebar';
+import SearchBar from './Components/searchBar';
+import FloatingActionButton from './Components/floatingActionButton';
+import Posts from './posts/posts';
+import Albums from './albums/albums';
+import Todos from './todos/todos';
 
 const Home = () => {
-    const [users, setUsers] = useState([]);
-    const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('posts');
 
-    useEffect(() => {
-        // Example: Fetch all users to test dbUtil
-        getAll('users')
-            .then(data => setUsers(data))
-            .catch(err => setError(err.message));
-    }, []);
-
-    return (
-        <div>
-            <h1>Welcome to the Home Page!</h1>
-            <p>This is the starting point of your application.</p>
-            <h2>Users from dbUtil:</h2>
-            {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-            <ul>
-                {users.map(user => (
-                    <li key={user.id}>{user.name}</li>
-                ))}
-            </ul>
+  return (
+    <div className="container-fluid vh-100">
+      <div className="d-flex h-100">
+        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <div className="flex-grow-1 p-4 position-relative">
+          <SearchBar />
+          {activeTab === 'posts' && <Posts />}
+          {activeTab === 'albums' && <Albums />}
+          {activeTab === 'todos' && <Todos />}
+          <FloatingActionButton />
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Home;
