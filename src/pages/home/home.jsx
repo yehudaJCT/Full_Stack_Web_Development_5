@@ -15,7 +15,9 @@ const Home = () => {
       <div className="d-flex h-100">
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="flex-grow-1 p-4 position-relative">
-          <SearchBar />
+          <div className="d-flex justify-content-center">
+            <SearchBar />
+          </div>
           {activeTab === 'posts' && <Posts />}
           {activeTab === 'albums' && <Albums />}
           {activeTab === 'todos' && <Todos />}
