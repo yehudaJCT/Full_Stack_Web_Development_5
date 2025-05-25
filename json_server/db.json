@@ -39842,12 +39842,6 @@
   "todos": [
     {
       "userId": 1,
-      "id": "1",
-      "title": "delectus aut autem 12345",
-      "completed": false
-    },
-    {
-      "userId": 1,
       "id": "2",
       "title": "quis ut nam facilis et officia qui",
       "completed": true
@@ -39862,7 +39856,7 @@
       "userId": 1,
       "id": "4",
       "title": "et porro tempora",
-      "completed": true
+      "completed": false
     },
     {
       "userId": 1,
@@ -39892,7 +39886,7 @@
       "userId": 1,
       "id": "9",
       "title": "molestiae perspiciatis ipsa",
-      "completed": false
+      "completed": true
     },
     {
       "userId": 1,
