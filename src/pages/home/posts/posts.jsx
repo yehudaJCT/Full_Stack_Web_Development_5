@@ -8,7 +8,6 @@ const Posts = () => {
     const { currentUser } = useContext(UserContext);
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedPost, setSelectedPost] = useState(null);
 
     useEffect(() => {
         if (currentUser) {
@@ -27,20 +26,10 @@ const Posts = () => {
     if (loading) return <div>Loading posts...</div>;
     if (posts.length === 0) return <div>No posts found for this user.</div>;
 
-    if (selectedPost) {
-        return (
-            <PostDetail
-                selectedPost={selectedPost}
-                setSelectedPost={setSelectedPost}
-                setPosts={setPosts}
-            />
-        );
-    }
-
     return (
         <PostList
             posts={posts}
-            setSelectedPost={setSelectedPost}
+            setPosts={setPosts}
         />
     );
 };

@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
 import CommentList from './CommentList';
+import PostDetail from './postDetail';
 
-const PostList = ({ posts, setSelectedPost }) => {
+const PostList = ({ posts, setPosts }) => {
   const [openedPostId, setOpenedPostId] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
+
 
   const handleClick = (postId) => {
     setOpenedPostId(prev => (prev === postId ? null : postId));
   };
+
+  if (selectedPost) {
+    return (
+      <PostDetail
+        selectedPost={selectedPost}
+        setSelectedPost={setSelectedPost}
+        setPosts={setPosts}
+      />
+    );
+  }
 
   return (
     <div>

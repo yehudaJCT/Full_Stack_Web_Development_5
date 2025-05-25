@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { getAll, patch, update, remove } from '../../../utils/dbUtil';
+import TodoDetail from './todoDetail';
 
 
-const TodoList = ({todos, setTodos, setSelectedTodo}) => {
+const TodoList = ({ todos, setTodos }) => {
+  const [selectedTodo, setSelectedTodo] = useState(null);
 
   const handleToggle = async (todo) => {
     try {
@@ -17,6 +19,17 @@ const TodoList = ({todos, setTodos, setSelectedTodo}) => {
     setSelectedTodo(todo);
   };
 
+  // Detail view for selected todo
+  if (selectedTodo) {
+    return (
+      <TodoDetail
+        selectedTodo={selectedTodo}
+        setSelectedTodo={setSelectedTodo}
+        setTodos={setTodos}
+      />
+    );
+  }
+
   // List view
   return (
     <div>
@@ -27,7 +40,7 @@ const TodoList = ({todos, setTodos, setSelectedTodo}) => {
             key={todo.id}
             className={`list-group-item d-flex justify-content-between align-items-center ${todo.completed ? 'list-group-item-success' : ''}`}
             onDoubleClick={() => handleDoubleClick(todo)}
-            style={{ cursor: "pointer"}}
+            style={{ cursor: "pointer" }}
             title="Double-click to edit"
           >
             <span>{todo.title}</span>
