@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { getAll, patch, update, remove } from '../../../utils/dbUtil';
 
-const TodoDetail = ({todo}) => {
-  const [editText, setEditText] = useState('');
+const TodoDetail = ({selectedTodo, setSelectedTodo, setTodos}) => {
+  const [editTitle, setEditTitle] = useState(selectedTodo.title || '');
 
 
   const handleSave = async () => {
