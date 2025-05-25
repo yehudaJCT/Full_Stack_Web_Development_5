@@ -19,6 +19,10 @@ async function fetchData(endpoint) {
  * @returns {Promise<any[]>} - Array of resource items.
  */
 async function getAll(resource) {
+
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
   return fetchData(resource);
 }
 
@@ -71,6 +75,11 @@ async function update(resource, id, data) {
  * @returns {Promise<any>} - The updated resource item.
  */
 async function patch(resource, id, data) {
+
+  // Simulate network delay
+  // await new Promise(resolve => setTimeout(resolve, 1000));
+
+
   const res = await fetch(`${BASE_URL}/${resource}/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

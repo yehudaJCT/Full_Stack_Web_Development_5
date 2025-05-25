@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAll } from "../utils/dbUtil";
-import { saveCurrentUser } from "../utils/users";
+import { getAll } from "../../utils/dbUtil.js";
+import { saveCurrentUser } from "../../utils/users";
 
 const Login = () => {
 	const [form, setForm] = useState({ name: "", password: "" });
