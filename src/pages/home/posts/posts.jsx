@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../../hooks/userProvider';
 import { getAll } from '../../../utils/dbUtil';
+import PostDetail from './postDetail';
+import PostList from './PostList';
 
 const Posts = () => {
     const { currentUser } = useContext(UserContext);
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedPost, setSelectedPost] = useState(null);
 
     useEffect(() => {
         if (currentUser) {
@@ -24,18 +27,21 @@ const Posts = () => {
     if (loading) return <div>Loading posts...</div>;
     if (posts.length === 0) return <div>No posts found for this user.</div>;
 
+    if (selectedPost) {
+        return (
+            <PostDetail
+                selectedPost={selectedPost}
+                setSelectedPost={setSelectedPost}
+                setPosts={setPosts}
+            />
+        );
+    }
+
     return (
-        <div>
-            <h4>Your Posts</h4>
-            <ul className="list-group">
-                {posts.map(post => (
-                    <li key={post.id} className="list-group-item">
-                        <strong>{post.title}</strong>
-                        <p>{post.body}</p>
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <PostList
+            posts={posts}
+            setSelectedPost={setSelectedPost}
+        />
     );
 };
 
