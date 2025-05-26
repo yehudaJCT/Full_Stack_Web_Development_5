@@ -7,7 +7,8 @@ export const UserProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState(null);
 
 	useEffect(() => {
-		setCurrentUser(getCurrentUser()?.userId);
+		console.log(getCurrentUser()?.userId);
+		setCurrentUser(1);
 	}, []);
 
 	return (
