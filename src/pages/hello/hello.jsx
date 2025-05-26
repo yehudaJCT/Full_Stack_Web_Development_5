@@ -1,19 +1,33 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import HeroSection from "./components/HeroSection";
+import FeaturesSection from "./components/FeaturesSection";
+import CTASection from "./components/CTASection";
+import FeatureHighlights from "./components/FeatureHighlights";
+import TechStackFooter from "./components/TechStackFooter";
 
 const Hello = () => {
-    return (
-        <div>
-            <h1>Hello Page</h1>
-            <p>
-                Welcome to the Hello page! This project is a full stack web application designed to demonstrate modern web development techniques using React for the frontend and a backend of your choice. 
-                You can register a new account or log in to access more features.
-            </p>           <div style={{ marginTop: '20px' }}>
-                <Link to="/login" style={{ marginRight: '15px' }}>Login</Link>
-                <Link to="/register">Register</Link>
-            </div>
-        </div>
-    );
+	return (
+		<div
+			className="min-vh-100 d-flex align-items-center"
+			style={{
+				background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+				fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+			}}
+		>
+			<div className="container">
+				<div className="row justify-content-center">
+					<div className="col-lg-10 col-xl-8">
+						<HeroSection />
+						<FeaturesSection />
+						<CTASection />
+						<FeatureHighlights />
+						<TechStackFooter />
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default Hello;
