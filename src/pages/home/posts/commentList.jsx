@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { getAll } from '../../../utils/dbUtil';
+import CommentDetail from './CommentDetail';
 
 
 const CommentList = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedComment, setSelectedComment] = useState(null);
 
   useEffect(() => {
     getAll('comments')
@@ -16,11 +18,26 @@ const CommentList = ({ postId }) => {
 
   if (loading) return <div>Loading comments...</div>;
   if (comments.length === 0) return <div>No comments.</div>;
+  if (selectedComment) {
+    return (
+      <CommentDetail
+        comment={selectedComment}
+        setEditingComment={setSelectedComment}
+        refreshComments={setComments}
+      />
+    );
+  }
 
   return (
     <ul className="list-group mt-2">
       {comments.map(comment => (
-        <li key={comment.id} className="list-group-item">
+        <li 
+          key={comment.id} 
+          className="list-group-item" 
+          onDoubleClick={() => setSelectedComment(comment)} 
+          style={{ cursor: 'pointer' }}
+          title="Double-click to edit comment"
+        >
           <small>
             <strong>{comment.name}</strong> ({comment.email})
             <p className="mb-0">{comment.body}</p>

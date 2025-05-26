@@ -14,7 +14,7 @@ const CommentDetail = ({ comment, setEditingComment, refreshComments }) => {
         email: editEmail,
         body: editBody,
       });
-      refreshComments();
+      refreshComments(prev => prev.map(c => (c.id === comment.id ? { ...c, name: editName, email: editEmail, body: editBody } : c)));
       setEditingComment(null);
     } catch (err) {
       alert('Failed to save comment');
@@ -25,7 +25,7 @@ const CommentDetail = ({ comment, setEditingComment, refreshComments }) => {
     if (!window.confirm('Are you sure you want to delete this comment?')) return;
     try {
       await remove('comments', comment.id);
-      refreshComments();
+      refreshComments(prev => prev.filter(c => c.id !== comment.id));
       setEditingComment(null);
     } catch (err) {
       alert('Failed to delete comment');
