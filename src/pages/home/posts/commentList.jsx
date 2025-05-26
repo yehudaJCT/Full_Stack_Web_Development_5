@@ -28,13 +28,18 @@ const CommentList = ({ postId }) => {
     );
   }
 
+  const handleDoubleClick = (comment) => {
+    // TODO check if the user is the author of the comment
+    setSelectedComment(comment);
+  }
+
   return (
     <ul className="list-group mt-2">
       {comments.map(comment => (
         <li 
           key={comment.id} 
           className="list-group-item" 
-          onDoubleClick={() => setSelectedComment(comment)} 
+          onDoubleClick={() => handleDoubleClick(comment)} 
           style={{ cursor: 'pointer' }}
           title="Double-click to edit comment"
         >
