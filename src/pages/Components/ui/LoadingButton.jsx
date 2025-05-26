@@ -5,11 +5,12 @@ const LoadingButton = ({
 	loadingText,
 	children,
 	className = "btn btn-primary w-100",
+	type = "submit",
 	...props
 }) => {
 	return (
 		<button
-			type="submit"
+			type={type}
 			className={className}
 			disabled={isLoading}
 			{...props}

@@ -11,6 +11,7 @@ const FormInput = ({
 	disabled = false,
 	minLength,
 	helpText,
+	className = "form-control",
 	...props
 }) => {
 	return (
@@ -20,7 +21,7 @@ const FormInput = ({
 			</label>
 			<input
 				type={type}
-				className="form-control"
+				className={className}
 				id={name}
 				name={name}
 				value={value}

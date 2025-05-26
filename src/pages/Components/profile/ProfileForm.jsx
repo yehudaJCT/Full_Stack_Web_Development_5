@@ -3,6 +3,7 @@ import PersonalInfoSection from "./PersonalInfoSection";
 import AddressInfoSection from "./AddressInfoSection";
 import CompanyInfoSection from "./CompanyInfoSection";
 import ErrorAlert from "../ui/ErrorAlert";
+import LoadingButton from "../ui/LoadingButton";
 
 const ProfileForm = ({
 	profileData,
@@ -40,32 +41,22 @@ const ProfileForm = ({
 
 			<div className="d-grid gap-2 d-md-flex justify-content-md-end">
 				{showBackButton && (
-					<button
+					<LoadingButton
 						type="button"
 						className="btn btn-outline-secondary me-md-2"
 						onClick={onBack}
-						disabled={isLoading}
+						isLoading={false}
 					>
 						{backButtonText}
-					</button>
+					</LoadingButton>
 				)}
-				<button
-					type="submit"
+				<LoadingButton
+					isLoading={isLoading}
+					loadingText={loadingText}
 					className="btn btn-primary"
-					disabled={isLoading}
 				>
-					{isLoading ? (
-						<>
-							<span
-								className="spinner-border spinner-border-sm me-2"
-								role="status"
-							></span>
-							{loadingText}
-						</>
-					) : (
-						submitText
-					)}
-				</button>
+					{submitText}
+				</LoadingButton>
 			</div>
 		</form>
 	);
