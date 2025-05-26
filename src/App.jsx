@@ -4,6 +4,7 @@ import Home from './pages/home/home.jsx';
 import Hello from './pages/hello/hello.jsx';
 import Login from './pages/login/login.jsx';
 import Register from './pages/register/register.jsx';
+import CompleteProfile from './pages/CompleteProfile/CompleteProfile.jsx';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route path='/home' element={<Home />} />
       <Route path='/login' element={<Login />} />
       <Route path='/register' element={<Register />} />
+      <Route path="/complete-profile" element={<CompleteProfile />} />
     </Routes>
   )
 }
