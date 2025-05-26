@@ -29,82 +29,216 @@ const ViewProfile = () => {
 
 	if (loading) {
 		return (
-			<AuthCard title="Profile">
-				<div className="text-center">Loading...</div>
+			<AuthCard title="My Profile" className="col-md-8 col-lg-6">
+				<div className="text-center py-5">
+					<div
+						className="spinner-border text-primary mb-3"
+						role="status"
+					>
+						<span className="visually-hidden">Loading...</span>
+					</div>
+					<p className="text-muted">Loading your profile...</p>
+				</div>
 			</AuthCard>
 		);
 	}
 
 	if (!userData) {
 		return (
-			<AuthCard title="Profile">
-				<div className="text-center">
-					<p>Profile not found.</p>
-					<Link to="/login" className="btn btn-primary">
-						Login
+			<AuthCard title="Profile Not Found" className="col-md-6 col-lg-5">
+				<div className="text-center py-4">
+					<div
+						className="d-inline-flex align-items-center justify-content-center rounded-circle bg-warning text-white mb-3"
+						style={{
+							width: "60px",
+							height: "60px",
+							fontSize: "24px",
+						}}
+					>
+						⚠️
+					</div>
+					<p className="text-muted mb-4">
+						We couldn't find your profile information.
+					</p>
+					<Link
+						to="/login"
+						className="btn btn-primary"
+						style={{
+							borderRadius: "12px",
+							padding: "10px 24px",
+							fontWeight: "600",
+						}}
+					>
+						Sign In Again
 					</Link>
 				</div>
 			</AuthCard>
 		);
 	}
 
-	return (
-		<AuthCard title="My Profile" className="col-md-8 col-lg-6">
-			<div className="row">
-				<div className="col-md-6 mb-3">
-					<label className="form-label fw-bold">Name:</label>
-					<p>{userData.name}</p>
-				</div>
-				<div className="col-md-6 mb-3">
-					<label className="form-label fw-bold">Username:</label>
-					<p>{userData.username}</p>
-				</div>
-				<div className="col-md-6 mb-3">
-					<label className="form-label fw-bold">Email:</label>
-					<p>{userData.email}</p>
-				</div>
-				<div className="col-md-6 mb-3">
-					<label className="form-label fw-bold">Phone:</label>
-					<p>{userData.phone || "Not provided"}</p>
-				</div>
-				<div className="col-md-12 mb-3">
-					<label className="form-label fw-bold">Website:</label>
-					<p>{userData.website || "Not provided"}</p>
-				</div>
-
-				{/* Address Section */}
-				<div className="col-md-12 mb-3">
-					<h6 className="text-primary">Address</h6>
-					<p>
-						{userData.address.street} {userData.address.suite}
-						<br />
-						{userData.address.city}, {userData.address.zipcode}
-					</p>
-				</div>
-
-				{/* Company Section */}
-				{userData.company.name && (
-					<div className="col-md-12 mb-3">
-						<h6 className="text-primary">Company</h6>
-						<p>
-							<strong>{userData.company.name}</strong>
-							<br />
-							{userData.company.catchPhrase}
-							<br />
-							<small className="text-muted">
-								{userData.company.bs}
-							</small>
-						</p>
+	const InfoCard = ({ icon, title, children, className = "" }) => (
+		<div className={`${className} mb-4`}>
+			<div
+				className="card border-0 h-100"
+				style={{
+					borderRadius: "16px",
+					backgroundColor: "#f8fafc",
+					border: "1px solid #e2e8f0",
+				}}
+			>
+				<div className="card-body p-4">
+					<div className="d-flex align-items-center mb-3">
+						<div
+							className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
+							style={{
+								width: "32px",
+								height: "32px",
+								background:
+									"linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+								color: "white",
+								fontSize: "14px",
+							}}
+						>
+							{icon}
+						</div>
+						<h6 className="fw-bold text-dark mb-0">{title}</h6>
 					</div>
+					{children}
+				</div>
+			</div>
+		</div>
+	);
+
+	const InfoItem = ({ label, value, isLink = false }) => (
+		<div className="mb-2">
+			<small
+				className="text-muted d-block"
+				style={{ fontSize: "12px", fontWeight: "600" }}
+			>
+				{label}
+			</small>
+			{isLink ? (
+				<a
+					href={value.startsWith("http") ? value : `http://${value}`}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="text-decoration-none"
+					style={{ color: "#667eea", fontWeight: "500" }}
+				>
+					{value}
+				</a>
+			) : (
+				<span className="text-dark" style={{ fontWeight: "500" }}>
+					{value || "Not provided"}
+				</span>
+			)}
+		</div>
+	);
+
+	return (
+		<AuthCard title="My Profile" className="col-md-10 col-lg-8">
+			<div className="row">
+				{/* Personal Information */}
+				<InfoCard
+					icon="👤"
+					title="Personal Information"
+					className="col-md-6"
+				>
+					<InfoItem label="Full Name" value={userData.name} />
+					<InfoItem label="Username" value={userData.username} />
+					<InfoItem label="Email Address" value={userData.email} />
+					<InfoItem label="Phone Number" value={userData.phone} />
+					<InfoItem
+						label="Website"
+						value={userData.website}
+						isLink={true}
+					/>
+				</InfoCard>
+
+				{/* Address Information */}
+				<InfoCard
+					icon="🏠"
+					title="Address Information"
+					className="col-md-6"
+				>
+					<InfoItem
+						label="Street Address"
+						value={`${userData.address.street} ${userData.address.suite}`.trim()}
+					/>
+					<InfoItem label="City" value={userData.address.city} />
+					<InfoItem
+						label="Zip Code"
+						value={userData.address.zipcode}
+					/>
+					<InfoItem
+						label="Coordinates"
+						value={
+							userData.address.geo.lat && userData.address.geo.lng
+								? `${userData.address.geo.lat}, ${userData.address.geo.lng}`
+								: "Not provided"
+						}
+					/>
+				</InfoCard>
+
+				{/* Company Information */}
+				{userData.company.name && (
+					<InfoCard
+						icon="🏢"
+						title="Company Information"
+						className="col-12"
+					>
+						<div className="row">
+							<div className="col-md-4">
+								<InfoItem
+									label="Company Name"
+									value={userData.company.name}
+								/>
+							</div>
+							<div className="col-md-4">
+								<InfoItem
+									label="Catch Phrase"
+									value={userData.company.catchPhrase}
+								/>
+							</div>
+							<div className="col-md-4">
+								<InfoItem
+									label="Business"
+									value={userData.company.bs}
+								/>
+							</div>
+						</div>
+					</InfoCard>
 				)}
 			</div>
 
-			<div className="d-grid gap-2 d-md-flex justify-content-md-end">
-				<Link to="/profile/edit" className="btn btn-primary">
-					Edit Profile
+			{/* Action Buttons */}
+			<div className="d-grid gap-3 d-md-flex justify-content-md-end mt-4 pt-4 border-top">
+				<Link
+					to="/home"
+					className="btn btn-outline-secondary"
+					style={{
+						borderRadius: "12px",
+						padding: "10px 24px",
+						fontWeight: "600",
+						minWidth: "120px",
+					}}
+				>
+					← Back to Home
 				</Link>
-				<Link to="/home" className="btn btn-outline-secondary">
-					Back to Home
+				<Link
+					to="/profile/edit"
+					className="btn btn-primary"
+					style={{
+						borderRadius: "12px",
+						padding: "10px 24px",
+						fontWeight: "600",
+						minWidth: "120px",
+						background:
+							"linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+						border: "none",
+					}}
+				>
+					✏️ Edit Profile
 				</Link>
 			</div>
 		</AuthCard>

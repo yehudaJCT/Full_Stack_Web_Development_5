@@ -36,23 +36,37 @@ const LoginForm = ({
 
 			<ErrorAlert message={error} />
 
-			<LoadingButton isLoading={isLoading} loadingText="Signing in...">
-				Login
+			<LoadingButton
+				isLoading={isLoading}
+				loadingText="Signing in..."
+				className="btn btn-primary w-100 mb-4"
+			>
+				Sign In
 			</LoadingButton>
 
-			<div className="text-center mt-3">
-				<small className="text-muted">
-					Don't have an account?
+			<div className="text-center">
+				<p className="text-muted mb-0" style={{ fontSize: "14px" }}>
+					Don't have an account?{" "}
 					<button
 						type="button"
-						className="btn btn-link text-decoration-none ms-1 p-0 align-baseline"
-						style={{ fontSize: "inherit" }}
+						className="btn btn-link p-0 fw-semibold"
+						style={{
+							color: "#667eea",
+							textDecoration: "none",
+							fontSize: "inherit",
+						}}
 						onClick={onNavigateToRegister}
 						disabled={isLoading}
+						onMouseEnter={(e) =>
+							(e.target.style.textDecoration = "underline")
+						}
+						onMouseLeave={(e) =>
+							(e.target.style.textDecoration = "none")
+						}
 					>
-						Sign up
+						Sign up here
 					</button>
-				</small>
+				</p>
 			</div>
 		</form>
 	);

@@ -18,10 +18,11 @@ const RegisterForm = ({
 				name="username"
 				value={formData.username}
 				onChange={onInputChange}
-				placeholder="Enter your username"
+				placeholder="Choose a unique username"
 				required
 				disabled={isLoading}
 				minLength="3"
+				helpText="Must be at least 3 characters long"
 			/>
 
 			<FormInput
@@ -30,11 +31,11 @@ const RegisterForm = ({
 				name="password"
 				value={formData.password}
 				onChange={onInputChange}
-				placeholder="Enter your password"
+				placeholder="Create a secure password"
 				required
 				disabled={isLoading}
 				minLength="6"
-				helpText="Password must be at least 6 characters long"
+				helpText="Must be at least 6 characters long"
 			/>
 
 			<FormInput
@@ -46,6 +47,7 @@ const RegisterForm = ({
 				placeholder="Confirm your password"
 				required
 				disabled={isLoading}
+				helpText="Please enter the same password again"
 			/>
 
 			<ErrorAlert message={error} />
@@ -53,23 +55,34 @@ const RegisterForm = ({
 			<LoadingButton
 				isLoading={isLoading}
 				loadingText="Creating Account..."
+				className="btn btn-primary w-100 mb-4"
 			>
-				Continue
+				Create Account
 			</LoadingButton>
 
-			<div className="text-center mt-3">
-				<small className="text-muted">
-					Already have an account?
+			<div className="text-center">
+				<p className="text-muted mb-0" style={{ fontSize: "14px" }}>
+					Already have an account?{" "}
 					<button
 						type="button"
-						className="btn btn-link text-decoration-none ms-1 p-0 align-baseline"
-						style={{ fontSize: "inherit" }}
+						className="btn btn-link p-0 fw-semibold"
+						style={{
+							color: "#667eea",
+							textDecoration: "none",
+							fontSize: "inherit",
+						}}
 						onClick={onNavigateToLogin}
 						disabled={isLoading}
+						onMouseEnter={(e) =>
+							(e.target.style.textDecoration = "underline")
+						}
+						onMouseLeave={(e) =>
+							(e.target.style.textDecoration = "none")
+						}
 					>
-						Sign in
+						Sign in here
 					</button>
-				</small>
+				</p>
 			</div>
 		</form>
 	);

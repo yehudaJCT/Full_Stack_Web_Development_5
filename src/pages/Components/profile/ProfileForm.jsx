@@ -39,13 +39,14 @@ const ProfileForm = ({
 
 			<ErrorAlert message={error} />
 
-			<div className="d-grid gap-2 d-md-flex justify-content-md-end">
+			<div className="d-grid gap-3 d-md-flex justify-content-md-end mt-4">
 				{showBackButton && (
 					<LoadingButton
 						type="button"
-						className="btn btn-outline-secondary me-md-2"
+						className="btn btn-outline-secondary"
 						onClick={onBack}
 						isLoading={false}
+						style={{ minWidth: "120px" }}
 					>
 						{backButtonText}
 					</LoadingButton>
@@ -54,6 +55,7 @@ const ProfileForm = ({
 					isLoading={isLoading}
 					loadingText={loadingText}
 					className="btn btn-primary"
+					style={{ minWidth: "180px" }}
 				>
 					{submitText}
 				</LoadingButton>
