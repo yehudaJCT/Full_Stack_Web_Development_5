@@ -61,7 +61,7 @@ export const useUserAccess = () => {
             const currentPath = window.location.pathname;
             const pathParts = currentPath.split('/');
             const newPath = currentPath.replace(`/users/${pathParts[2]}`, `/users/${currentUser.userId}`);
-            window.location.href = newPath;
+            navigate(newPath); 
         }
     };
 

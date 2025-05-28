@@ -66,9 +66,6 @@ const SearchBar = ({ searchTerm, setSearchTerm, activeTab }) => {
           </button>
         )}
       </div>
-      <span className="ms-2" style={{ fontSize: 28 }}>
-        &#9776;
-      </span>
     </div>
   );
 };
