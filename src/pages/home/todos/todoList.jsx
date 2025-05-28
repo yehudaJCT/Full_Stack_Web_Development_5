@@ -43,6 +43,7 @@ const TodoList = ({ todos, setTodos }) => {
             style={{ cursor: "pointer" }}
             title="Double-click to edit"
           >
+            <strong>{todo.id}.</strong>
             <span>{todo.title}</span>
             <span>
               <input

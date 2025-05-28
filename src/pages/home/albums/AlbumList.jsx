@@ -26,7 +26,8 @@ const AlbumList = ({ albums, setAlbums }) => {
             style={{ cursor: 'pointer' }}
             title="Double-click to view/edit album"
           >
-            <strong>{album.title}</strong>
+            <strong> {album.id}. </strong>
+            <strong> {album.title} </strong>
           </li>
         ))}
       </ul>

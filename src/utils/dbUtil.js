@@ -101,6 +101,11 @@ async function remove(resource, id) {
   return res.ok;
 }
 
+async function getItemId(resource) {
+  const items = await getAll(resource);
+  return items.length ? Math.max(...items.map(item => item.id)) + 1 : 1;
+}
+
 // Export functions
 export {
   getAll,
@@ -109,4 +114,5 @@ export {
   update,
   patch,
   remove,
+  getItemId,
 };
