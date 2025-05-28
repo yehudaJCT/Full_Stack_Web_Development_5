@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../../hooks/userProvider'; 
-import { getAll, patch, update, remove } from '../../../utils/dbUtil';
+import { getAll } from '../../../utils/dbUtil';
 import TodoList from './todoList';
+import { filterTodos } from '../../../utils/searchUtils';
 
-const Todos = ({todos, setTodos}) => {
+const Todos = ({ todos, setTodos, searchTerm }) => {
   const { currentUser } = useContext(UserContext);
-  //const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,15 +20,14 @@ const Todos = ({todos, setTodos}) => {
       setTodos([]);
       setLoading(false);
     }
-  }, [currentUser]);
-
+  }, [currentUser, setTodos]);
 
   if (loading) return <div>Loading todos...</div>;
   if (todos.length === 0) return <div>No todos found for this user.</div>;
 
   return (
-    < TodoList
-      todos={todos}
+    <TodoList
+      todos={filteredTodos}
       setTodos={setTodos}
     />
   );
