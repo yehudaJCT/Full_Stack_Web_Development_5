@@ -10,6 +10,7 @@ import { UserProvider } from '../../hooks/userProvider'; // <-- import UserProvi
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState('posts');
+  const [data, setData] = useState([]);
 
   return (
     <UserProvider>
@@ -20,10 +21,10 @@ const Home = () => {
             <div className="d-flex justify-content-center">
               <SearchBar />
             </div>
-            {activeTab === 'posts' && <Posts />}
-            {activeTab === 'albums' && <Albums />}
-            {activeTab === 'todos' && <Todos />}
-            <FloatingActionButton />
+            {activeTab === 'posts' && <Posts posts={data} setPosts={setData} />}
+            {activeTab === 'albums' && <Albums albums={data} setAlbums={setData} />}
+            {activeTab === 'todos' && <Todos todos={data} setTodos={setData} />}
+            <FloatingActionButton activeTab={activeTab} setData={setData} />
           </div>
         </div>
       </div>

@@ -3,9 +3,9 @@ import { UserContext } from '../../../hooks/userProvider';
 import { getAll, patch, update, remove } from '../../../utils/dbUtil';
 import TodoList from './todoList';
 
-const Todos = () => {
+const Todos = ({todos, setTodos}) => {
   const { currentUser } = useContext(UserContext);
-  const [todos, setTodos] = useState([]);
+  //const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

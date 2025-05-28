@@ -4,9 +4,9 @@ import { getAll } from '../../../utils/dbUtil';
 import PostDetail from './postDetail';
 import PostList from './PostList';
 
-const Posts = () => {
+const Posts = ({posts, setPosts}) => {
     const { currentUser } = useContext(UserContext);
-    const [posts, setPosts] = useState([]);
+    // const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

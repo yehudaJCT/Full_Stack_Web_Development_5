@@ -3,9 +3,9 @@ import { UserContext } from '../../../hooks/userProvider';
 import { getAll } from '../../../utils/dbUtil';
 import AlbumList from './AlbumList';
 
-const Albums = () => {
+const Albums = ({albums, setAlbums}) => {
     const { currentUser } = useContext(UserContext);
-    const [albums, setAlbums] = useState([]);
+    //const [albums, setAlbums] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
