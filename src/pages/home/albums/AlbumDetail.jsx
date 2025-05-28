@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { update, remove } from '../../../utils/dbUtil';
 import PhotoList from './PhotoList';
+import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 
-const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums }) => {
+const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums, onBack }) => {
   const [editTitle, setEditTitle] = useState(selectedAlbum.title || '');
+  const { navigateToAlbums, navigateToPhotos } = useUrlNavigation();
 
   const handleSave = async () => {
     try {
-      const updated = await update('albums', selectedAlbum.id, { ...selectedAlbum, title: editTitle });
+      const updated = await update('albums', selectedAlbum.id, { 
+        ...selectedAlbum, 
+        title: editTitle 
+      });
       setAlbums(prev => prev.map(a => (a.id === selectedAlbum.id ? updated : a)));
-      setSelectedAlbum(null);
+      handleBack();
     } catch (err) {
       alert('Failed to save changes');
     }
@@ -20,7 +25,7 @@ const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums }) => {
     try {
       await remove('albums', selectedAlbum.id);
       setAlbums(prev => prev.filter(a => a.id !== selectedAlbum.id));
-      setSelectedAlbum(null);
+      handleBack();
     } catch (err) {
       alert('Failed to delete album');
     }
@@ -28,11 +33,24 @@ const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums }) => {
 
   const handleBack = () => {
     setSelectedAlbum(null);
+    if (onBack) {
+      onBack();
+    } else {
+      navigateToAlbums();
+    }
+  };
+
+  const handleViewPhotos = () => {
+    navigateToPhotos(selectedAlbum.id);
   };
 
   return (
     <div>
-      <h4>Edit Album</h4>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h4>Edit Album</h4>
+        <small className="text-muted">Album ID: {selectedAlbum.id}</small>
+      </div>
+      
       <div className="mb-3">
         <label className="form-label">Title:</label>
         <input
@@ -41,9 +59,14 @@ const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums }) => {
           onChange={e => setEditTitle(e.target.value)}
         />
       </div>
-      <button className="btn btn-primary me-2" onClick={handleSave}>Save</button>
-      <button className="btn btn-danger me-2" onClick={handleDelete}>Delete</button>
-      <button className="btn btn-secondary" onClick={handleBack}>Back</button>
+      
+      <div className="mb-3">
+        <button className="btn btn-primary me-2" onClick={handleSave}>Save</button>
+        <button className="btn btn-danger me-2" onClick={handleDelete}>Delete</button>
+        <button className="btn btn-secondary me-2" onClick={handleBack}>Back</button>
+        <button className="btn btn-info" onClick={handleViewPhotos}>View Photos</button>
+      </div>
+
       <PhotoList albumId={selectedAlbum.id} />
     </div>
   );

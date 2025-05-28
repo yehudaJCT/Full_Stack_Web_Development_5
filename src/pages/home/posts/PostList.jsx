@@ -1,14 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CommentList from './CommentList';
 import PostDetail from './postDetail';
+import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 
 const PostList = ({ posts, setPosts }) => {
   const [openedPostId, setOpenedPostId] = useState(null);
   const [selectedPost, setSelectedPost] = useState(null);
+  const { parseCurrentUrl, navigateToPost, navigateToPosts } = useUrlNavigation();
 
+  // Parse URL to determine if we should show a specific post
+  useEffect(() => {
+    const urlState = parseCurrentUrl();
+    if (urlState.activeItemId && urlState.activeTab === 'posts') {
+      const postId = parseInt(urlState.activeItemId);
+      const post = posts.find(p => p.id === postId);
+      if (post) {
+        setSelectedPost(post);
+      }
+    } else {
+      setSelectedPost(null);
+    }
+  }, [parseCurrentUrl, posts]);
 
   const handleClick = (postId) => {
     setOpenedPostId(prev => (prev === postId ? null : postId));
+  };
+
+  const handleDoubleClick = (post) => {
+    setSelectedPost(post);
+    navigateToPost(post.id);
+  };
+
+  const handleBackToList = () => {
+    setSelectedPost(null);
+    navigateToPosts();
   };
 
   if (selectedPost) {
@@ -17,6 +42,7 @@ const PostList = ({ posts, setPosts }) => {
         selectedPost={selectedPost}
         setSelectedPost={setSelectedPost}
         setPosts={setPosts}
+        onBack={handleBackToList}
       />
     );
   }
@@ -30,7 +56,7 @@ const PostList = ({ posts, setPosts }) => {
             key={post.id}
             className="list-group-item"
             onClick={() => handleClick(post.id)}
-            onDoubleClick={() => setSelectedPost(post)}
+            onDoubleClick={() => handleDoubleClick(post)}
             style={{ cursor: 'pointer' }}
             title="Click to show comments, double-click to edit"
           >

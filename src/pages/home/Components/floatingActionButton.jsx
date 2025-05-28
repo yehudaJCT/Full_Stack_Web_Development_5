@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../../../hooks/userProvider';
 import { create, getItemId } from '../../../utils/dbUtil';
+import { useDataManagement } from '../../../hooks/useDataManagement';
 
 const defaultFields = {
   todos: { title: '', completed: false },
@@ -8,8 +9,9 @@ const defaultFields = {
   albums: { title: '' },
 };
 
-const FloatingActionButton = ({ activeTab, setData }) => {
+const FloatingActionButton = ({ activeTab }) => {
   const { currentUser } = useContext(UserContext);
+  const { addItem } = useDataManagement(activeTab);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [fields, setFields] = useState(defaultFields[activeTab] || {});
@@ -34,9 +36,8 @@ const FloatingActionButton = ({ activeTab, setData }) => {
     let id = await getItemId(resource);
     let newItemData = { userId: currentUser, id: id, ...fields };
     try {
-      //await new Promise(resolve => setTimeout(resolve, 1000));
       const newItem = await create(resource, newItemData);
-      setData(prev => [...prev, newItem]);
+      addItem(newItem);
       setShowForm(false);
     } catch {
       alert('Failed to add item');

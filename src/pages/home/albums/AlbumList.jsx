@@ -1,8 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AlbumDetail from './AlbumDetail';
+import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 
 const AlbumList = ({ albums, setAlbums }) => {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
+  const { parseCurrentUrl, navigateToAlbum, navigateToAlbums } = useUrlNavigation();
+
+  // Parse URL to determine if we should show a specific album
+  useEffect(() => {
+    const urlState = parseCurrentUrl();
+    if (urlState.activeItemId && urlState.activeTab === 'albums') {
+      const albumId = parseInt(urlState.activeItemId);
+      const album = albums.find(a => a.id === albumId);
+      if (album) {
+        setSelectedAlbum(album);
+      }
+    } else {
+      setSelectedAlbum(null);
+    }
+  }, [parseCurrentUrl, albums]);
+
+  const handleDoubleClick = (album) => {
+    setSelectedAlbum(album);
+    navigateToAlbum(album.id);
+  };
+
+  const handleBackToList = () => {
+    setSelectedAlbum(null);
+    navigateToAlbums();
+  };
 
   if (selectedAlbum) {
     return (
@@ -10,6 +36,7 @@ const AlbumList = ({ albums, setAlbums }) => {
         selectedAlbum={selectedAlbum}
         setSelectedAlbum={setSelectedAlbum}
         setAlbums={setAlbums}
+        onBack={handleBackToList}
       />
     );
   }
@@ -22,7 +49,7 @@ const AlbumList = ({ albums, setAlbums }) => {
           <li
             key={album.id}
             className="list-group-item"
-            onDoubleClick={() => setSelectedAlbum(album)}
+            onDoubleClick={() => handleDoubleClick(album)}
             style={{ cursor: 'pointer' }}
             title="Double-click to view/edit album"
           >

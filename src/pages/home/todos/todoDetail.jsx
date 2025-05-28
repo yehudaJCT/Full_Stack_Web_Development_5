@@ -1,15 +1,19 @@
-import React, {useState} from 'react';
-import { getAll, patch, update, remove } from '../../../utils/dbUtil';
+import React, { useState } from 'react';
+import { update, remove } from '../../../utils/dbUtil';
+import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 
-const TodoDetail = ({selectedTodo, setSelectedTodo, setTodos}) => {
+const TodoDetail = ({ selectedTodo, setSelectedTodo, setTodos, onBack }) => {
   const [editTitle, setEditTitle] = useState(selectedTodo.title || '');
-
+  const { navigateToTodos } = useUrlNavigation();
 
   const handleSave = async () => {
     try {
-      const updated = await update('todos', selectedTodo.id, { ...selectedTodo, title: editTitle });
+      const updated = await update('todos', selectedTodo.id, { 
+        ...selectedTodo, 
+        title: editTitle 
+      });
       setTodos(prev => prev.map(t => (t.id === selectedTodo.id ? updated : t)));
-      setSelectedTodo(null);
+      handleBack();
     } catch (err) {
       alert('Failed to save changes');
     }
@@ -20,7 +24,7 @@ const TodoDetail = ({selectedTodo, setSelectedTodo, setTodos}) => {
     try {
       await remove('todos', selectedTodo.id);
       setTodos(prev => prev.filter(t => t.id !== selectedTodo.id));
-      setSelectedTodo(null);
+      handleBack();
     } catch (err) {
       alert('Failed to delete todo');
     }
@@ -28,11 +32,20 @@ const TodoDetail = ({selectedTodo, setSelectedTodo, setTodos}) => {
 
   const handleBack = () => {
     setSelectedTodo(null);
+    if (onBack) {
+      onBack();
+    } else {
+      navigateToTodos();
+    }
   };
 
   return (
     <div>
-      <h4>Edit Todo</h4>
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h4>Edit Todo</h4>
+        <small className="text-muted">Todo ID: {selectedTodo.id}</small>
+      </div>
+      
       <div className="mb-3">
         <label className="form-label">Title:</label>
         <input
@@ -41,6 +54,7 @@ const TodoDetail = ({selectedTodo, setSelectedTodo, setTodos}) => {
           onChange={e => setEditTitle(e.target.value)}
         />
       </div>
+      
       <div className="mb-3">
         <label className="form-label">Completed:</label>
         <input
@@ -52,9 +66,12 @@ const TodoDetail = ({selectedTodo, setSelectedTodo, setTodos}) => {
           className="form-check-input"
         />
       </div>
-      <button className="btn btn-primary me-2" onClick={handleSave}>Save</button>
-      <button className="btn btn-danger me-2" onClick={handleDelete}>Delete</button>
-      <button className="btn btn-secondary" onClick={handleBack}>Back</button>
+      
+      <div className="mb-3">
+        <button className="btn btn-primary me-2" onClick={handleSave}>Save</button>
+        <button className="btn btn-danger me-2" onClick={handleDelete}>Delete</button>
+        <button className="btn btn-secondary" onClick={handleBack}>Back</button>
+      </div>
     </div>
   );
 };

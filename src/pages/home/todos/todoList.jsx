@@ -1,10 +1,25 @@
-import React, { useState } from 'react';
-import { getAll, patch, update, remove } from '../../../utils/dbUtil';
+import React, { useState, useEffect } from 'react';
+import { patch } from '../../../utils/dbUtil';
 import TodoDetail from './todoDetail';
-
+import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 
 const TodoList = ({ todos, setTodos }) => {
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const { parseCurrentUrl, navigateToTodo, navigateToTodos } = useUrlNavigation();
+
+  // Parse URL to determine if we should show a specific todo
+  useEffect(() => {
+    const urlState = parseCurrentUrl();
+    if (urlState.activeItemId && urlState.activeTab === 'todos') {
+      const todoId = parseInt(urlState.activeItemId);
+      const todo = todos.find(t => t.id === todoId);
+      if (todo) {
+        setSelectedTodo(todo);
+      }
+    } else {
+      setSelectedTodo(null);
+    }
+  }, [parseCurrentUrl, todos]);
 
   const handleToggle = async (todo) => {
     try {
@@ -17,6 +32,12 @@ const TodoList = ({ todos, setTodos }) => {
 
   const handleDoubleClick = (todo) => {
     setSelectedTodo(todo);
+    navigateToTodo(todo.id);
+  };
+
+  const handleBackToList = () => {
+    setSelectedTodo(null);
+    navigateToTodos();
   };
 
   // Detail view for selected todo
@@ -26,6 +47,7 @@ const TodoList = ({ todos, setTodos }) => {
         selectedTodo={selectedTodo}
         setSelectedTodo={setSelectedTodo}
         setTodos={setTodos}
+        onBack={handleBackToList}
       />
     );
   }

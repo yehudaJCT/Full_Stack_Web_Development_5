@@ -1,28 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../../hooks/userProvider';
-import { getAll } from '../../../utils/dbUtil';
+import React from 'react';
 import AlbumList from './AlbumList';
 import { filterAlbums } from '../../../utils/searchUtils';
+import { useDataManagement } from '../../../hooks/useDataManagement';
 
-const Albums = ({ albums, setAlbums, searchTerm }) => {
-  const { currentUser } = useContext(UserContext);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (currentUser) {
-      getAll('albums')
-        .then(data => {
-          const userAlbums = data.filter(album => String(album.userId) === String(currentUser));
-          setAlbums(userAlbums);
-        })
-        .finally(() => setLoading(false));
-    } else {
-      setAlbums([]);
-      setLoading(false);
-    }
-  }, [currentUser, setAlbums]);
+const Albums = ({ searchTerm }) => {
+  const { data: albums, loading, error, setData: setAlbums } = useDataManagement('albums');
 
   if (loading) return <div>Loading albums...</div>;
+  if (error) return <div className="alert alert-danger">{error}</div>;
   if (albums.length === 0) return <div>No albums found for this user.</div>;
 
   // Filter albums based on search term

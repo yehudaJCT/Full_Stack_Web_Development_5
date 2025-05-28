@@ -1,30 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../../hooks/userProvider";
-import { getAll } from "../../../utils/dbUtil";
+import React from "react";
 import TodoList from "./todoList";
 import { filterTodos } from "../../../utils/searchUtils";
+import { useDataManagement } from "../../../hooks/useDataManagement";
 
-const Todos = ({ todos, setTodos, searchTerm }) => {
-	const { currentUser } = useContext(UserContext);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		if (currentUser) {
-			getAll("todos")
-				.then((data) => {
-					const userTodos = data.filter(
-						(todo) => String(todo.userId) === String(currentUser)
-					);
-					setTodos(userTodos);
-				})
-				.finally(() => setLoading(false));
-		} else {
-			setTodos([]);
-			setLoading(false);
-		}
-	}, [currentUser, setTodos]);
+const Todos = ({ searchTerm }) => {
+	const { data: todos, loading, error, setData: setTodos } = useDataManagement('todos');
 
 	if (loading) return <div>Loading todos...</div>;
+	if (error) return <div className="alert alert-danger">{error}</div>;
 	if (todos.length === 0) return <div>No todos found for this user.</div>;
 
 	// Filter todos based on search term
