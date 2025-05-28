@@ -29,8 +29,6 @@ const Posts = ({ posts, setPosts, searchTerm }) => {
   // Filter posts based on search term
   const filteredPosts = filterPosts(posts, searchTerm || '');
 
-  console.log('Posts component - searchTerm:', searchTerm, 'total posts:', posts.length, 'filtered posts:', filteredPosts.length);
-
   return (
     <div>
       {searchTerm && (

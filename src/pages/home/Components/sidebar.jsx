@@ -1,59 +1,70 @@
-import React from "react";
-import { getCurrentUser } from "../../../utils/users";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getCurrentUser, removeCurrentUser } from "../../../utils/users";
+import ProfileAvatar from "./profile/ProfileAvatar";
+import ProfileMenu from "./profile/ProfileMenu";
+import NavigationTabs from "./navigation/NavigationTabs";
+import MenuOverlay from "./ui/MenuOverlay";
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
+	const navigate = useNavigate();
 	const currentUser = getCurrentUser();
+	const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+	const handleLogout = () => {
+		removeCurrentUser();
+		navigate("/login");
+	};
+
+	const handleViewProfile = () => {
+		setShowProfileMenu(false);
+		navigate("/profile");
+	};
+
+	const handleEditProfile = () => {
+		setShowProfileMenu(false);
+		navigate("/profile/edit");
+	};
+
+	const toggleProfileMenu = () => {
+		setShowProfileMenu(!showProfileMenu);
+	};
+
+	const handleMenuClose = () => {
+		setShowProfileMenu(false);
+	};
 
 	return (
-		<div
-			className="col-3 col-md-2 bg-light border-end d-flex flex-column p-3"
-			style={{ minWidth: 220 }}
-		>
-			<div className="d-flex flex-column align-items-center mb-4">
-				<div
-					className="rounded-circle bg-secondary"
-					style={{ width: 60, height: 60 }}
-				></div>
-				<span className="mt-2 fw-bold">
-					{(currentUser && currentUser.name) || "user name"}
-				</span>
-				<span className="text-muted" style={{ fontSize: 12 }}>
-					__________
-				</span>
+		<>
+			<div
+				className="col-3 col-md-2 bg-light border-end d-flex flex-column p-3"
+				style={{ minWidth: 220 }}
+			>
+				<ProfileAvatar
+					currentUser={currentUser}
+					showProfileMenu={showProfileMenu}
+					onToggleMenu={toggleProfileMenu}
+				/>
+
+				{showProfileMenu && (
+					<ProfileMenu
+						onViewProfile={handleViewProfile}
+						onEditProfile={handleEditProfile}
+						onLogout={handleLogout}
+					/>
+				)}
+
+				<NavigationTabs
+					activeTab={activeTab}
+					setActiveTab={setActiveTab}
+				/>
 			</div>
-			<div className="mb-3">
-				<button
-					className={`btn w-100 text-start mb-2 ${
-						activeTab === "posts"
-							? "btn-outline-dark"
-							: "btn-link text-dark text-decoration-none"
-					}`}
-					onClick={() => setActiveTab("posts")}
-				>
-					posts
-				</button>
-				<button
-					className={`btn w-100 text-start mb-2 ${
-						activeTab === "albums"
-							? "btn-outline-dark"
-							: "btn-link text-dark text-decoration-none"
-					}`}
-					onClick={() => setActiveTab("albums")}
-				>
-					albums
-				</button>
-				<button
-					className={`btn w-100 text-start ${
-						activeTab === "todos"
-							? "btn-outline-dark"
-							: "btn-link text-dark text-decoration-none"
-					}`}
-					onClick={() => setActiveTab("todos")}
-				>
-					todos
-				</button>
-			</div>
-		</div>
+
+			<MenuOverlay
+				isVisible={showProfileMenu}
+				onClose={handleMenuClose}
+			/>
+		</>
 	);
 };
 
