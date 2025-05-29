@@ -32,17 +32,11 @@ const Albums = ({ searchTerm }) => {
 
   return (
     <div>
-      {searchTerm && (
-        <div className="alert alert-info mb-3">
-          <small>
-            Found <strong>{filteredAlbums.length}</strong> album{filteredAlbums.length !== 1 ? 's' : ''} 
-            {searchTerm && ` matching "${searchTerm}"`}
-          </small>
-        </div>
-      )}
       <AlbumList 
         albums={filteredAlbums} 
-        setAlbums={setAlbums} 
+        setAlbums={setAlbums}
+        searchTerm={searchTerm}
+        showSearchResults={searchTerm && filteredAlbums.length !== albums.length}
       />
     </div>
   );

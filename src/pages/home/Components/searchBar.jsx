@@ -8,7 +8,7 @@ const SearchBar = ({ searchTerm, setSearchTerm, activeTab }) => {
       case "posts":
         return "Search posts by ID or title...";
       case "albums":
-        return "Search albums by ID or title...";
+        return "Search albums by ID or title, or photos by title...";
       default:
         return "Search...";
     }

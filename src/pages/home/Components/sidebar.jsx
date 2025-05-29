@@ -13,7 +13,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
 	const handleLogout = () => {
 		removeCurrentUser();
-		navigate("/login");
+		navigate("/");
 	};
 
 	const handleViewProfile = () => {
