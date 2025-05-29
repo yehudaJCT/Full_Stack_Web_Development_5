@@ -60,6 +60,7 @@ const PostList = ({ posts, setPosts }) => {
             style={{ cursor: 'pointer' }}
             title="Click to show comments, double-click to edit"
           >
+            <strong>{post.id}. </strong>
             <strong>{post.title}</strong>
             <p>{post.body}</p>
             {/* Show comments only if this post is opened */}

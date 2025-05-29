@@ -8,7 +8,7 @@ export const useDataManagement = (resourceType) => {
     const [error, setError] = useState(null);
     const { currentUser } = useContext(UserContext);
 
-    // Load data for the current user
+    // Load data for the current user 
     const loadData = useCallback(async () => {
         if (!currentUser) {
             setData([]);
@@ -39,9 +39,11 @@ export const useDataManagement = (resourceType) => {
     }, [loadData]);
 
     // Add new item to the data
-    const addItem = useCallback((newItem) => {
-        setData(prev => [...prev, newItem]);
-    }, []);
+    // const addItem = useCallback((newItem) => {
+    //     setData(prev => [...prev, newItem]);
+    // }, []);
+
+    const addItem = (newItem) => {setData(prev => [...prev, newItem]);}
 
     // Update existing item
     const updateItem = useCallback((itemId, updatedItem) => {

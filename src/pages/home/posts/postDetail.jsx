@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
-import { update, remove } from '../../../utils/dbUtil';
+import React, { useState, useContext } from 'react';
+import { update, remove, create, getItemId } from '../../../utils/dbUtil';
 import CommentList from './CommentList';
 import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
+import { UserContext } from '../../../hooks/userProvider';
+
 
 const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
   const [editTitle, setEditTitle] = useState(selectedPost.title || '');
   const [editBody, setEditBody] = useState(selectedPost.body || '');
+  const [newComment, setNewComment] = useState(null); // State for new comment
   const { navigateToPosts } = useUrlNavigation();
+  const { currentUser } = useContext(UserContext);
+
 
   const handleSave = async () => {
     try {
-      const updated = await update('posts', selectedPost.id, { 
-        ...selectedPost, 
-        title: editTitle, 
-        body: editBody 
+      const updated = await update('posts', selectedPost.id, {
+        ...selectedPost,
+        title: editTitle,
+        body: editBody
       });
       setPosts(prev => prev.map(p => (p.id === selectedPost.id ? updated : p)));
       handleBack();
@@ -42,10 +47,24 @@ const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
     }
   };
 
-  const handleAddComment = () => {
-    // Logic to add a new comment can be implemented here
-    console.log('Add comment functionality not implemented yet');
-  }
+  const handleAddComment = async () => {
+    try {
+      const newCommentId = await getItemId('comments'); // Generate a new ID for the comment
+      const newComment = {
+        postId: selectedPost.id,
+        id: newCommentId,
+        name: 'New Comment',
+        email: 'placeholder@example.com',
+        body: 'This is a new comment.',
+        userId: currentUser,
+      };
+
+      const newItem =  await create('comments', newComment); // Add the new comment to the database
+      setNewComment(newItem); // Update state to trigger re-render
+    } catch (err) {
+      alert('Failed to add comment');
+    }
+  };
 
   return (
     <div>
@@ -53,7 +72,7 @@ const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
         <h4>Edit Post</h4>
         <small className="text-muted">Post ID: {selectedPost.id}</small>
       </div>
-      
+
       <div className="mb-3">
         <label className="form-label">Title:</label>
         <input
@@ -62,7 +81,7 @@ const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
           onChange={e => setEditTitle(e.target.value)}
         />
       </div>
-      
+
       <div className="mb-3">
         <label className="form-label">Body:</label>
         <textarea
@@ -71,14 +90,14 @@ const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
           onChange={e => setEditBody(e.target.value)}
         />
       </div>
-      
+
       <div className="mb-3">
         <button className="btn btn-primary me-2" onClick={handleSave}>Save</button>
         <button className="btn btn-danger me-2" onClick={handleDelete}>Delete</button>
         <button className="btn btn-secondary" onClick={handleBack}>Back</button>
       </div>
 
-      <CommentList postId={selectedPost.id} />
+      <CommentList postId={selectedPost.id} newComment={newComment} />
       <button className="btn btn-secondary mt-3" onClick={handleAddComment}>Add Comment</button>
     </div>
   );

@@ -3,9 +3,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "./Components/sidebar";
 import SearchBar from "./Components/searchBar";
 import FloatingActionButton from "./Components/floatingActionButton";
-import Breadcrumb from "./Components/Breadcrumb";
 import Posts from "./posts/posts";
 import Albums from "./albums/albums";
+import Breadcrumb from "./Components/Breadcrumb";
 import Todos from "./todos/todos";
 import { UserProvider } from "../../hooks/userProvider";
 import { useUrlNavigation } from "../../hooks/useUrlNavigation";
@@ -13,100 +13,109 @@ import { useUserAccess } from "../../hooks/useUserAccess";
 import AccessDenied from "../Components/ui/AccessDenied";
 
 const Home = () => {
-	const [searchTerm, setSearchTerm] = useState("");
-	const { parseCurrentUrl, navigateToSection } = useUrlNavigation();
-	const { isAuthorized, isLoading, error, redirectToUserData } =
-		useUserAccess();
+  const [activeTab, setActiveTab] = useState("posts");
+  const [data, setData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { parseCurrentUrl, navigateToSection } = useUrlNavigation();
+  const { isAuthorized, isLoading, error, redirectToUserData } = useUserAccess();
 
-	// Parse URL to determine current state
-	const urlState = parseCurrentUrl();
-	const [activeTab, setActiveTab] = useState(urlState.activeTab);
+  // Update active tab when URL changes
+  useEffect(() => {
+    const currentUrlState = parseCurrentUrl();
+    setActiveTab(currentUrlState.activeTab);
+  }, [parseCurrentUrl]);
 
-	// Update active tab when URL changes
-	useEffect(() => {
-		const currentUrlState = parseCurrentUrl();
-		setActiveTab(currentUrlState.activeTab);
-	}, [parseCurrentUrl]);
+  // Handle tab changes with URL navigation
+  const handleTabChange = (newTab) => {
+    setActiveTab(newTab);
+    navigateToSection(newTab);
+    setSearchTerm(""); // Clear search when switching tabs
+  };
 
-	// Handle tab changes with URL navigation
-	const handleTabChange = (newTab) => {
-		setActiveTab(newTab);
-		navigateToSection(newTab);
-		setSearchTerm(""); // Clear search when switching tabs
-	};
+  // Handle redirect to user's own data
+  const handleRedirectToUserData = () => {
+    redirectToUserData();
+  };
 
-	// Handle redirect to user's own data
-	const handleRedirectToUserData = () => {
-		redirectToUserData();
-	};
+  // Show loading while checking access
+  if (isLoading) {
+    return (
+      <div
+        className="min-vh-100 d-flex align-items-center justify-content-center"
+        style={{
+          background:
+            "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        }}
+      >
+        <div className="text-center text-white">
+          <div
+            className="spinner-border mb-3"
+            role="status"
+            style={{ width: "3rem", height: "3rem" }}
+          >
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p>Verifying access permissions...</p>
+        </div>
+      </div>
+    );
+  }
 
-	// Show loading while checking access
-	if (isLoading) {
-		return (
-			<div
-				className="min-vh-100 d-flex align-items-center justify-content-center"
-				style={{
-					background:
-						"linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-				}}
-			>
-				<div className="text-center text-white">
-					<div
-						className="spinner-border mb-3"
-						role="status"
-						style={{ width: "3rem", height: "3rem" }}
-					>
-						<span className="visually-hidden">Loading...</span>
-					</div>
-					<p>Verifying access permissions...</p>
-				</div>
-			</div>
-		);
-	}
+  // Show access denied if unauthorized
+  if (!isAuthorized && error) {
+    return (
+      <AccessDenied error={error} onRedirect={handleRedirectToUserData} />
+    );
+  }
 
-	// Show access denied if unauthorized
-	if (!isAuthorized && error) {
-		return (
-			<AccessDenied error={error} onRedirect={handleRedirectToUserData} />
-		);
-	}
-
-	// Show main application if authorized
-	return (
-		<UserProvider>
-			<div className="container-fluid vh-100">
-				<div className="d-flex h-100">
-					<Sidebar
-						activeTab={activeTab}
-						setActiveTab={handleTabChange}
-					/>
-					<div className="flex-grow-1 p-4 position-relative">
-						{/* Breadcrumb Navigation */}
-						<Breadcrumb />
-
-						<div className="d-flex justify-content-center">
-							<SearchBar
-								searchTerm={searchTerm}
-								setSearchTerm={setSearchTerm}
-								activeTab={activeTab}
-							/>
-						</div>
-
-						{activeTab === "posts" && (
-							<Posts searchTerm={searchTerm} />
-						)}
-						{activeTab === "albums" && (
-							<Albums searchTerm={searchTerm} />
-						)}
-						{activeTab === "todos" && (
-							<Todos searchTerm={searchTerm} />
-						)}
-						<FloatingActionButton activeTab={activeTab} />
-					</div>
-				</div>
-			</div>
-		</UserProvider>
-	);
+  return (
+    <UserProvider>
+      <div className="container-fluid vh-100">
+        <div className="d-flex h-100">
+          <Sidebar
+            activeTab={activeTab}
+            setActiveTab={handleTabChange}
+          />
+          <div className="flex-grow-1 p-4 position-relative">
+            {/* Breadcrumb Navigation */}
+            <Breadcrumb />
+            <div className="d-flex justify-content-center">
+              <SearchBar
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                activeTab={activeTab}
+              />
+            </div>
+            {activeTab === "posts" && (
+              <Posts
+                posts={data}
+                setPosts={setData}
+                searchTerm={searchTerm}
+              />
+            )}
+            {activeTab === "albums" && (
+              <Albums
+                albums={data}
+                setAlbums={setData}
+                searchTerm={searchTerm}
+              />
+            )}
+            {activeTab === "todos" && (
+              <Todos
+                todos={data}
+                setTodos={setData}
+                searchTerm={searchTerm}
+              />
+            )}
+            <FloatingActionButton
+              activeTab={activeTab}
+              setData={setData}
+            />
+          </div>
+        </div>
+      </div>
+    </UserProvider>
+  );
 };
 
 export default Home;
