@@ -3,9 +3,9 @@ import { UserContext } from '../../../hooks/userProvider';
 import { getAll } from '../../../utils/dbUtil';
 import AlbumList from './AlbumList';
 import { filterAlbums } from '../../../utils/searchUtils';
+import { sortAlbums } from '../../../utils/sortUtils';
 
-
-const Albums = ({ searchTerm }) => {
+const Albums = ({ searchTerm, sortBy = "id" }) => {
   const { currentUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [albums, setAlbums] = useState([]);
@@ -29,14 +29,44 @@ const Albums = ({ searchTerm }) => {
 
   // Filter albums based on search term
   const filteredAlbums = filterAlbums(albums, searchTerm || '');
+  
+  // Sort the filtered albums
+  const sortedAlbums = sortAlbums(filteredAlbums, sortBy);
+
+  const getSortDescription = () => {
+    switch (sortBy) {
+      case "title":
+        return "sorted by title";
+      case "id":
+      default:
+        return "sorted by ID";
+    }
+  };
 
   return (
     <div>
+      {(searchTerm || sortBy !== "id") && (
+        <div className="alert alert-info mb-3">
+          <small>
+            {searchTerm ? (
+              <>
+                Found <strong>{sortedAlbums.length}</strong> album{sortedAlbums.length !== 1 ? 's' : ''} 
+                {` matching "${searchTerm}"`}
+                {sortBy !== "id" && `, ${getSortDescription()}`}
+              </>
+            ) : (
+              <>
+                Showing <strong>{sortedAlbums.length}</strong> album{sortedAlbums.length !== 1 ? 's' : ''} {getSortDescription()}
+              </>
+            )}
+          </small>
+        </div>
+      )}
       <AlbumList 
-        albums={filteredAlbums} 
+        albums={sortedAlbums} 
         setAlbums={setAlbums}
         searchTerm={searchTerm}
-        showSearchResults={searchTerm && filteredAlbums.length !== albums.length}
+        showSearchResults={false} // We're handling this in the parent component now
       />
     </div>
   );

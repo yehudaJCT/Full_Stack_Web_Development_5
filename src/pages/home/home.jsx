@@ -14,6 +14,7 @@ import AccessDenied from "../Components/ui/AccessDenied";
 const Home = () => {
   const [activeTab, setActiveTab] = useState("posts");
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("id"); // Default sort by ID
   const { parseCurrentUrl, navigateToSection } = useUrlNavigation();
   const { isAuthorized, isLoading, error, redirectToUserData } = useUserAccess();
 
@@ -28,6 +29,7 @@ const Home = () => {
     setActiveTab(newTab);
     navigateToSection(newTab);
     setSearchTerm(""); // Clear search when switching tabs
+    setSortBy("id"); // Reset sort to default when switching tabs
   };
 
   // Handle redirect to user's own data
@@ -82,21 +84,26 @@ const Home = () => {
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 activeTab={activeTab}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
               />
             </div>
             {activeTab === "posts" && (
               <Posts
                 searchTerm={searchTerm}
+                sortBy={sortBy}
               />
             )}
             {activeTab === "albums" && (
               <Albums
                 searchTerm={searchTerm}
+                sortBy={sortBy}
               />
             )}
             {activeTab === "todos" && (
               <Todos
                 searchTerm={searchTerm}
+                sortBy={sortBy}
               />
             )}
           </div>

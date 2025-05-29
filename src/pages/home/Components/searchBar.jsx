@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchBar = ({ searchTerm, setSearchTerm, activeTab }) => {
+const SearchBar = ({ searchTerm, setSearchTerm, activeTab, sortBy, setSortBy }) => {
   const getPlaceholder = () => {
     switch (activeTab) {
       case "todos":
@@ -17,6 +17,35 @@ const SearchBar = ({ searchTerm, setSearchTerm, activeTab }) => {
   const handleClear = () => {
     setSearchTerm("");
   };
+
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+  };
+
+  const getSortOptions = () => {
+    switch (activeTab) {
+      case "todos":
+        return [
+          { value: "id", label: "Sort by ID" },
+          { value: "title", label: "Sort by Title" },
+          { value: "completion", label: "Sort by Completion" }
+        ];
+      case "posts":
+        return [
+          { value: "id", label: "Sort by ID" },
+          { value: "title", label: "Sort by Title" }
+        ];
+      case "albums":
+        return [
+          { value: "id", label: "Sort by ID" },
+          { value: "title", label: "Sort by Title" }
+        ];
+      default:
+        return [];
+    }
+  };
+
+  const sortOptions = getSortOptions();
 
   return (
     <div
@@ -66,6 +95,35 @@ const SearchBar = ({ searchTerm, setSearchTerm, activeTab }) => {
           </button>
         )}
       </div>
+      
+      {/* Sort Dropdown - Only show if there are sort options */}
+      {sortOptions.length > 0 && (
+        <div className="ms-2">
+          <select
+            className="form-select"
+            value={sortBy || "id"}
+            onChange={handleSortChange}
+            style={{
+              minWidth: "150px",
+              borderRadius: "8px",
+              border: "2px solid #e9ecef",
+              transition: "border-color 0.2s ease",
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "#667eea";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "#e9ecef";
+            }}
+          >
+            {sortOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   );
 };

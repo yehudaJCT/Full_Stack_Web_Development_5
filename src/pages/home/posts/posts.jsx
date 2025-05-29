@@ -4,8 +4,9 @@ import { getAll } from '../../../utils/dbUtil';
 import PostDetail from './postDetail';
 import PostList from './PostList';
 import { filterPosts } from '../../../utils/searchUtils';
+import { sortPosts } from '../../../utils/sortUtils';
 
-const Posts = ({ searchTerm }) => {
+const Posts = ({ searchTerm, sortBy = "id" }) => {
   const { currentUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState([]);
@@ -29,19 +30,41 @@ const Posts = ({ searchTerm }) => {
 
   // Filter posts based on search term
   const filteredPosts = filterPosts(posts, searchTerm || '');
+  
+  // Sort the filtered posts
+  const sortedPosts = sortPosts(filteredPosts, sortBy);
+
+  const getSortDescription = () => {
+    switch (sortBy) {
+      case "title":
+        return "sorted by title";
+      case "id":
+      default:
+        return "sorted by ID";
+    }
+  };
 
   return (
     <div>
-      {searchTerm && (
+      {(searchTerm || sortBy !== "id") && (
         <div className="alert alert-info mb-3">
           <small>
-            Found <strong>{filteredPosts.length}</strong> post{filteredPosts.length !== 1 ? 's' : ''} 
-            {searchTerm && ` matching "${searchTerm}"`}
+            {searchTerm ? (
+              <>
+                Found <strong>{sortedPosts.length}</strong> post{sortedPosts.length !== 1 ? 's' : ''} 
+                {` matching "${searchTerm}"`}
+                {sortBy !== "id" && `, ${getSortDescription()}`}
+              </>
+            ) : (
+              <>
+                Showing <strong>{sortedPosts.length}</strong> post{sortedPosts.length !== 1 ? 's' : ''} {getSortDescription()}
+              </>
+            )}
           </small>
         </div>
       )}
       <PostList
-        posts={filteredPosts}
+        posts={sortedPosts}
         setPosts={setPosts}
       />
     </div>
