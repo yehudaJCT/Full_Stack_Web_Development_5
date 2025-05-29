@@ -3,10 +3,16 @@ import { getAll } from '../../../utils/dbUtil';
 import CommentDetail from './CommentDetail';
 
 
-const CommentList = ({ postId }) => {
+const CommentList = ({ postId, newComment = null }) => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedComment, setSelectedComment] = useState(null);
+
+  if (newComment) {
+    // If a new comment is provided, add it to the comments list
+    setComments(prevComments => [...prevComments, newComment]);
+    newComment = null; // Reset newComment to avoid re-adding
+  }
 
   useEffect(() => {
     getAll('comments')
@@ -15,6 +21,7 @@ const CommentList = ({ postId }) => {
       })
       .finally(() => setLoading(false));
   }, [postId]);
+
 
   if (loading) return <div>Loading comments...</div>;
   if (comments.length === 0) return <div>No comments.</div>;
@@ -44,6 +51,7 @@ const CommentList = ({ postId }) => {
           title="Double-click to edit comment"
         >
           <small>
+            <strong>{comment.id}. </strong>
             <strong>{comment.name}</strong> ({comment.email})
             <p className="mb-0">{comment.body}</p>
           </small>
