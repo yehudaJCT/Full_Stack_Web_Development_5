@@ -3,7 +3,7 @@ import { update, remove } from '../../../utils/dbUtil';
 import PhotoList from './PhotoList';
 import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 
-const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums, onBack }) => {
+const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums, onBack, searchTerm = '' }) => {
   const [editTitle, setEditTitle] = useState(selectedAlbum.title || '');
   const { navigateToAlbums, navigateToPhotos } = useUrlNavigation();
 
@@ -67,7 +67,7 @@ const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums, onBack }) => 
         <button className="btn btn-info" onClick={handleViewPhotos}>View Photos</button>
       </div>
 
-      <PhotoList albumId={selectedAlbum.id} />
+      <PhotoList albumId={selectedAlbum.id} searchTerm={searchTerm} />
     </div>
   );
 };

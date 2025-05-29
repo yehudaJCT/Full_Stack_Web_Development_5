@@ -7,15 +7,21 @@ import Register from "./pages/auth/register.jsx";
 import CompleteProfile from "./pages/auth/CompleteProfile.jsx";
 import EditProfile from "./pages/profile/EditProfile.jsx";
 import ViewProfile from "./pages/profile/ViewProfile.jsx";
+import NotFound from "./pages/error/NotFound.jsx";
 
 function App() {
 	return (
 		<Routes>
+			{/* Main Application Routes */}
 			<Route path="/" element={<Hello />} />
 			<Route path="/home" element={<Home />} />
+			
+			{/* Authentication Routes */}
 			<Route path="/login" element={<Login />} />
 			<Route path="/register" element={<Register />} />
 			<Route path="/complete-profile" element={<CompleteProfile />} />
+			
+			{/* Profile Routes */}
 			<Route path="/profile" element={<ViewProfile />} />
 			<Route path="/profile/edit" element={<EditProfile />} />
 
@@ -35,6 +41,9 @@ function App() {
 			/>
 			<Route path="/users/:userId/todos" element={<Home />} />
 			<Route path="/users/:userId/todos/:todoId" element={<Home />} />
+
+			{/* 404 - Catch all unmatched routes */}
+			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);
 }

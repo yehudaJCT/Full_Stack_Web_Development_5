@@ -39,3 +39,15 @@ export const filterAlbums = (albums, searchTerm) => {
         album.title.toLowerCase().includes(term)
     );
 };
+
+export const filterPhotos = (photos, searchTerm) => {
+    if (!searchTerm || typeof searchTerm !== 'string' || !searchTerm.trim()) {
+        return photos;
+    }
+
+    const term = searchTerm.toLowerCase().trim();
+    return photos.filter(photo =>
+        photo.id.toString().includes(term) ||
+        photo.title.toLowerCase().includes(term)
+    );
+};
