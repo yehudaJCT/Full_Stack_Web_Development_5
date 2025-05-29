@@ -7,8 +7,8 @@ export const UserProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = useState(null);
 
 	useEffect(() => {
-		//setCurrentUser(getCurrentUser()?.userId);
-		setCurrentUser(1); // For testing purposes, setting a static user ID
+		setCurrentUser(getCurrentUser()?.userId);
+		//setCurrentUser(1); // For testing purposes, setting a static user ID
 	}, []);
 
 	return (

@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getAll } from '../../../utils/dbUtil';
 import CommentDetail from './CommentDetail';
 import FloatingActionButton from '../Components/floatingActionButton';
-
+import { UserContext } from '../../../hooks/userProvider';
+import ErrorAlert from '../../Components/ui/ErrorAlert';
 
 
 const CommentList = ({ postId, newComment = null }) => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedComment, setSelectedComment] = useState(null);
+  const { currentUser } = useContext(UserContext);
 
   useEffect(() => {
     if (newComment) {
@@ -38,8 +40,13 @@ const CommentList = ({ postId, newComment = null }) => {
   }
 
   const handleDoubleClick = (comment) => {
-    // TODO check if the user is the author of the comment
-    setSelectedComment(comment);
+    if (comment?.userId === currentUser) {
+      setSelectedComment(comment);
+    }
+    else {
+      <ErrorAlert message={"You can only edit your own comments."}/>
+      alert("You can only edit your own comments.");
+    }
   }
 
   return (
