@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getAll } from '../../../utils/dbUtil';
 import CommentDetail from './CommentDetail';
+import FloatingActionButton from '../Components/floatingActionButton';
+
 
 
 const CommentList = ({ postId, newComment = null }) => {
@@ -8,11 +10,11 @@ const CommentList = ({ postId, newComment = null }) => {
   const [loading, setLoading] = useState(true);
   const [selectedComment, setSelectedComment] = useState(null);
 
-  if (newComment) {
-    // If a new comment is provided, add it to the comments list
-    setComments(prevComments => [...prevComments, newComment]);
-    newComment = null; // Reset newComment to avoid re-adding
-  }
+  useEffect(() => {
+    if (newComment) {
+      setComments(prevComments => [...prevComments, newComment]);
+    }
+  }, [newComment]); // Empty effect to avoid warning about newComment
 
   useEffect(() => {
     getAll('comments')
@@ -41,23 +43,26 @@ const CommentList = ({ postId, newComment = null }) => {
   }
 
   return (
-    <ul className="list-group mt-2">
-      {comments.map(comment => (
-        <li 
-          key={comment.id} 
-          className="list-group-item" 
-          onDoubleClick={() => handleDoubleClick(comment)} 
-          style={{ cursor: 'pointer' }}
-          title="Double-click to edit comment"
-        >
-          <small>
-            <strong>{comment.id}. </strong>
-            <strong>{comment.name}</strong> ({comment.email})
-            <p className="mb-0">{comment.body}</p>
-          </small>
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="list-group mt-2">
+        {comments.map(comment => (
+          <li
+            key={comment.id}
+            className="list-group-item"
+            onDoubleClick={() => handleDoubleClick(comment)}
+            style={{ cursor: 'pointer' }}
+            title="Double-click to edit comment"
+          >
+            <small>
+              <strong>{comment.id}. </strong>
+              <strong>{comment.name}</strong> ({comment.email})
+              <p className="mb-0">{comment.body}</p>
+            </small>
+          </li>
+        ))}
+      </ul>
+      <FloatingActionButton activeTab={"comments"} setData={setComments} />
+    </>
   );
 };
 

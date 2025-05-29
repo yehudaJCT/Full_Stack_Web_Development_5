@@ -4,9 +4,11 @@ import { getAll } from '../../../utils/dbUtil';
 import AlbumList from './AlbumList';
 import { filterAlbums } from '../../../utils/searchUtils';
 
-const Albums = ({ albums, setAlbums, searchTerm }) => {
+
+const Albums = ({ searchTerm }) => {
   const { currentUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
+  const [albums, setAlbums] = useState([]);
 
   useEffect(() => {
     if (currentUser) {

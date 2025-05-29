@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getAll } from '../../../utils/dbUtil';
+import FloatingActionButton from '../Components/floatingActionButton';
+
+
 
 const PHOTOS_PER_PAGE = 8;
 
@@ -53,6 +56,7 @@ const PhotoList = ({ albumId }) => {
           </button>
         </div>
       )}
+      <FloatingActionButton activeTab={"photos"} setData={setAllPhotos} />
     </div>
   );
 };

@@ -4,7 +4,6 @@ import CommentList from './CommentList';
 import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
 import { UserContext } from '../../../hooks/userProvider';
 
-
 const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
   const [editTitle, setEditTitle] = useState(selectedPost.title || '');
   const [editBody, setEditBody] = useState(selectedPost.body || '');
@@ -47,25 +46,6 @@ const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
     }
   };
 
-  const handleAddComment = async () => {
-    try {
-      const newCommentId = await getItemId('comments'); // Generate a new ID for the comment
-      const newComment = {
-        postId: selectedPost.id,
-        id: newCommentId,
-        name: 'New Comment',
-        email: 'placeholder@example.com',
-        body: 'This is a new comment.',
-        userId: currentUser,
-      };
-
-      const newItem =  await create('comments', newComment); // Add the new comment to the database
-      setNewComment(newItem); // Update state to trigger re-render
-    } catch (err) {
-      alert('Failed to add comment');
-    }
-  };
-
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -98,7 +78,6 @@ const PostDetail = ({ selectedPost, setSelectedPost, setPosts, onBack }) => {
       </div>
 
       <CommentList postId={selectedPost.id} newComment={newComment} />
-      <button className="btn btn-secondary mt-3" onClick={handleAddComment}>Add Comment</button>
     </div>
   );
 };

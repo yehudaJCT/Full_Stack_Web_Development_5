@@ -40,10 +40,6 @@ const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums, onBack }) => 
     }
   };
 
-  const handleViewPhotos = () => {
-    navigateToPhotos(selectedAlbum.id);
-  };
-
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -64,7 +60,6 @@ const AlbumDetail = ({ selectedAlbum, setSelectedAlbum, setAlbums, onBack }) => 
         <button className="btn btn-primary me-2" onClick={handleSave}>Save</button>
         <button className="btn btn-danger me-2" onClick={handleDelete}>Delete</button>
         <button className="btn btn-secondary me-2" onClick={handleBack}>Back</button>
-        <button className="btn btn-info" onClick={handleViewPhotos}>View Photos</button>
       </div>
 
       <PhotoList albumId={selectedAlbum.id} />

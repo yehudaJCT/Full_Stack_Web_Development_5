@@ -4,8 +4,9 @@ import { getAll } from "../../../utils/dbUtil";
 import TodoList from "./todoList";
 import { filterTodos } from "../../../utils/searchUtils";
 
-const Todos = ({ todos, setTodos, searchTerm }) => {
+const Todos = ({ searchTerm }) => {
 	const { currentUser } = useContext(UserContext);
+	const [todos, setTodos] = useState([]);
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {

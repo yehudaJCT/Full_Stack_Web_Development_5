@@ -5,9 +5,10 @@ import PostDetail from './postDetail';
 import PostList from './PostList';
 import { filterPosts } from '../../../utils/searchUtils';
 
-const Posts = ({ posts, setPosts, searchTerm }) => {
+const Posts = ({ searchTerm }) => {
   const { currentUser } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     if (currentUser) {

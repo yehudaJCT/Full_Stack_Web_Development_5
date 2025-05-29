@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "./Components/sidebar";
 import SearchBar from "./Components/searchBar";
-import FloatingActionButton from "./Components/floatingActionButton";
 import Posts from "./posts/posts";
 import Albums from "./albums/albums";
 import Breadcrumb from "./Components/Breadcrumb";
@@ -14,7 +13,6 @@ import AccessDenied from "../Components/ui/AccessDenied";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("posts");
-  const [data, setData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { parseCurrentUrl, navigateToSection } = useUrlNavigation();
   const { isAuthorized, isLoading, error, redirectToUserData } = useUserAccess();
@@ -88,29 +86,19 @@ const Home = () => {
             </div>
             {activeTab === "posts" && (
               <Posts
-                posts={data}
-                setPosts={setData}
                 searchTerm={searchTerm}
               />
             )}
             {activeTab === "albums" && (
               <Albums
-                albums={data}
-                setAlbums={setData}
                 searchTerm={searchTerm}
               />
             )}
             {activeTab === "todos" && (
               <Todos
-                todos={data}
-                setTodos={setData}
                 searchTerm={searchTerm}
               />
             )}
-            <FloatingActionButton
-              activeTab={activeTab}
-              setData={setData}
-            />
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AlbumDetail from './AlbumDetail';
 import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
+import FloatingActionButton from '../Components/floatingActionButton';
 
 const AlbumList = ({ albums, setAlbums }) => {
   const [selectedAlbum, setSelectedAlbum] = useState(null);
@@ -58,6 +59,7 @@ const AlbumList = ({ albums, setAlbums }) => {
           </li>
         ))}
       </ul>
+      <FloatingActionButton activeTab={"albums"} setData={setAlbums} />
     </div>
   );
 };

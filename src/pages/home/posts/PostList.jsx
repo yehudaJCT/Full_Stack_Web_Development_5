@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CommentList from './CommentList';
 import PostDetail from './postDetail';
 import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
+import FloatingActionButton from '../Components/floatingActionButton';
 
 const PostList = ({ posts, setPosts }) => {
   const [openedPostId, setOpenedPostId] = useState(null);
@@ -68,6 +69,7 @@ const PostList = ({ posts, setPosts }) => {
           </li>
         ))}
       </ul>
+      <FloatingActionButton activeTab={"posts"} setData={setPosts} />
     </div>
   );
 };

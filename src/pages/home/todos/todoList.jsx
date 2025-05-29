@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { patch } from '../../../utils/dbUtil';
 import TodoDetail from './todoDetail';
 import { useUrlNavigation } from '../../../hooks/useUrlNavigation';
+import FloatingActionButton from "../Components/floatingActionButton";
+
 
 const TodoList = ({ todos, setTodos }) => {
   const [selectedTodo, setSelectedTodo] = useState(null);
   const { parseCurrentUrl, navigateToTodo, navigateToTodos } = useUrlNavigation();
+  //const [addTodo, setAddTodo] = useState(null);
 
   // Parse URL to determine if we should show a specific todo
   useEffect(() => {
@@ -80,6 +83,7 @@ const TodoList = ({ todos, setTodos }) => {
           </li>
         ))}
       </ul>
+      <FloatingActionButton activeTab={"todos"} setData={setTodos} />
     </div>
   );
 }
