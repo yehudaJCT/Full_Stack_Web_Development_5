@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import AuthCard from "../Components/ui/AuthCard";
 import { getCurrentUser } from "../../utils/users";
 import { getAll } from "../../utils/dbUtil";
+import InfoCard from "./components/InfoCard";
+import InfoItem from "./components/InfoItem";
+import LoadingProfile from "./components/LoadingProfile";
 
 const ViewProfile = () => {
 	const [userData, setUserData] = useState(null);
@@ -28,19 +31,7 @@ const ViewProfile = () => {
 	}, []);
 
 	if (loading) {
-		return (
-			<AuthCard title="My Profile" className="col-md-8 col-lg-6">
-				<div className="text-center py-5">
-					<div
-						className="spinner-border text-primary mb-3"
-						role="status"
-					>
-						<span className="visually-hidden">Loading...</span>
-					</div>
-					<p className="text-muted">Loading your profile...</p>
-				</div>
-			</AuthCard>
-		);
+		return <LoadingProfile />;
 	}
 
 	if (!userData) {
@@ -75,65 +66,6 @@ const ViewProfile = () => {
 			</AuthCard>
 		);
 	}
-
-	const InfoCard = ({ icon, title, children, className = "" }) => (
-		<div className={`${className} mb-4`}>
-			<div
-				className="card border-0 h-100"
-				style={{
-					borderRadius: "16px",
-					backgroundColor: "#f8fafc",
-					border: "1px solid #e2e8f0",
-				}}
-			>
-				<div className="card-body p-4">
-					<div className="d-flex align-items-center mb-3">
-						<div
-							className="d-inline-flex align-items-center justify-content-center rounded-circle me-3"
-							style={{
-								width: "32px",
-								height: "32px",
-								background:
-									"linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-								color: "white",
-								fontSize: "14px",
-							}}
-						>
-							{icon}
-						</div>
-						<h6 className="fw-bold text-dark mb-0">{title}</h6>
-					</div>
-					{children}
-				</div>
-			</div>
-		</div>
-	);
-
-	const InfoItem = ({ label, value, isLink = false }) => (
-		<div className="mb-2">
-			<small
-				className="text-muted d-block"
-				style={{ fontSize: "12px", fontWeight: "600" }}
-			>
-				{label}
-			</small>
-			{isLink ? (
-				<a
-					href={value.startsWith("http") ? value : `http://${value}`}
-					target="_blank"
-					rel="noopener noreferrer"
-					className="text-decoration-none"
-					style={{ color: "#667eea", fontWeight: "500" }}
-				>
-					{value}
-				</a>
-			) : (
-				<span className="text-dark" style={{ fontWeight: "500" }}>
-					{value || "Not provided"}
-				</span>
-			)}
-		</div>
-	);
 
 	return (
 		<AuthCard title="My Profile" className="col-md-10 col-lg-8">
