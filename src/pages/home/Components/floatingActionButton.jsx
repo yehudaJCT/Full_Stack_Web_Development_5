@@ -12,7 +12,6 @@ const defaultFields = {
 };
 
 const FloatingActionButton = ({ activeTab, setData }) => {
-  console.log(activeTab);
   const { currentUser } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -40,7 +39,7 @@ const FloatingActionButton = ({ activeTab, setData }) => {
     let resource = activeTab;
     let id = await getItemId(resource);
 
-    let newItemData = { userId: currentUser, id: id, ...fields };
+    let newItemData = { userId: currentUser, id: `${id}`, ...fields };
     if (activeItemId) {
       if (activeTab === 'comments') {
         newItemData.postId = activeItemId; // Set postId for comments

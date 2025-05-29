@@ -13,6 +13,7 @@ const Posts = ({ searchTerm, sortBy = "id" }) => {
 
   useEffect(() => {
     if (currentUser) {
+      setLoading(true);
       getAll('posts')
         .then(data => {
           const userPosts = data.filter(post => String(post.userId) === String(currentUser));
